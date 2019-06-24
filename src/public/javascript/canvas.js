@@ -27,8 +27,10 @@ let friction = 0.89; //to be stored as Vector
  * Vars in relation to storing the ball object
  */
 let numOfBalls = 4;
+let numOfAttractors = 1;
 let ball = null;
 let balls = [];
+let attractors = [];
 
 /**
  * Create vars for object - will store vectors
@@ -89,7 +91,26 @@ function getRandomInt(max) {
 }
 
 /**
+ * Create an object that can attract the other objects
+ */
+function AttractionObject(x, y, mass) {
+    this.attractionLocation = new Vector2(x, y);
+    this.attractionMass = mass;
+
+    this.drawAttraction = function () {
+        context.beginPath();
+        context.strokeStyle = '#000000';
+        context.fillStyle = '#505250';
+        context.arc(this.attractionLocation.x, this.attractionLocation.y, this.attractionMass, 0, 2 * Math.PI);
+        context.stroke();
+        context.fill();
+        context.closePath();
+    };
+}
+
+/**
  * Create the ball object, draw it to canvas, update position and clear from canvas
+ * @param mass
  * @param x
  * @param y
  * @param xv
@@ -144,7 +165,7 @@ function Ball(mass, x, y, xv, yv, colour, size) {
         this.location.addVector(this.velocity);
 
         this.draw();
-        //collisionDetection();
+
 
     };
 
@@ -168,7 +189,10 @@ function createObject() {
             colours[getRandomInt(colours.length)],
             size);
         balls.push(ball);
-        console.log(balls[i]);
+    }
+    for (let i = 0; i < numOfAttractors; i++) {
+        let att = new AttractionObject(width / 2, height / 2, 20);
+        attractors.push(att);
     }
 }
 
@@ -182,7 +206,11 @@ function animate() {
 
     for (let i = 0; i < balls.length; i++) {
         balls[i].update();
+        for (let i = 0; i < attractors.length; i++) {
+            attractors[i].drawAttraction();
+        }
     }
+
 }
 
 function collisionDetection() {
@@ -217,6 +245,15 @@ function force(force) {
     for (let i = 0; i < balls.length; i++) {
         force.divide(balls[i].mass);
         balls[i].acceleration.addVector(force);
+    }
+}
+
+function angleOfEachObject() {
+    let angle = [];
+    for (let i = 0; i < balls.length; i++) {
+        //balls[i].findAngle();
+        angle[i] = Math.floor(balls[i].location.findAngle());
+        console.log(angle[i]);
     }
 }
 
