@@ -63,6 +63,22 @@ function random(min, max) {
 }
 
 /**
+ * Get position of mouse while it is hovering over canvas element
+ */
+function getMousePosition() {
+    context.canvas.addEventListener('mousemove', function (event) {
+        mouse.x = event.clientX - context.canvas.offsetLeft;
+        mouse.y = event.clientY - context.canvas.offsetTop;
+        let mousePosition = document.getElementById('mouseposition');
+        mousePosition.innerHTML = "x: " + mouse.x + " y: " + mouse.y;
+    });
+}
+
+window.addEventListener('load', function (event) {
+    getMousePosition();
+});
+
+/**
  * From MDN
  * Will take a number and return a value up to that number
  * @param max
@@ -200,7 +216,6 @@ function collisionReaction() {
 function force(force) {
     for (let i = 0; i < balls.length; i++) {
         force.divide(balls[i].mass);
-        console.log("This is force " + force);
         balls[i].acceleration.addVector(force);
     }
 }
