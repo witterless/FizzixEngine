@@ -18,26 +18,20 @@ let height = canvas.height;
 
 /**
  * Store forces in the 'world'
- * @type {number}
+ * @type {Vector2}
  */
-let gravity = new Vector2(0, 1.5); //to be stored as Vector
-let friction = 0.89; //to be stored as Vector
+let gravity = new Vector2(0, 1.5);
+let friction = 0.89;
+let wind = new Vector2(0.5, 0);
 
 /**
  * Vars in relation to storing the ball object
  */
-let numOfBalls = 4;
+let numOfBalls = 5;
 let numOfAttractors = 1;
 let ball = null;
 let balls = [];
 let attractors = [];
-
-/**
- * Create vars for object - will store vectors
- */
-let location;
-let velocity;
-let acceleration;
 
 /**
  * Store the mouse in var
@@ -52,7 +46,9 @@ let colours = ['#7CEA9C',
     '#55D6BE',
     '#2E5EAA',
     '#665883',
-    '#593959'];
+    '#593959',
+    '#DDDBF1',
+    '#FFB400'];
 
 /**
  * Function that will return random number between 2 numbers
@@ -76,7 +72,7 @@ function getMousePosition() {
     });
 }
 
-window.addEventListener('load', function (event) {
+window.addEventListener('load', function () {
     getMousePosition();
 });
 
@@ -96,8 +92,9 @@ function getRandomInt(max) {
 function AttractionObject(x, y, mass) {
     this.attractionLocation = new Vector2(x, y);
     this.attractionMass = mass;
+    this.gravity = 1;
 
-    this.drawAttraction = function () {
+    this.displayAttractor = function () {
         context.beginPath();
         context.strokeStyle = '#000000';
         context.fillStyle = '#505250';
@@ -106,6 +103,16 @@ function AttractionObject(x, y, mass) {
         context.fill();
         context.closePath();
     };
+
+    this.implementAttraction = function (ballObject) {
+        let force = this.attractionLocation.subtractVector(ballObject.location);
+        let distance = force.length();
+
+        let strengthOfAttraction = (this.gravity * this.attractionMass * ballObject.mass) / (distance * distance);
+        force.multiply(strengthOfAttraction);
+        return force;
+    }
+
 }
 
 /**
@@ -123,10 +130,10 @@ function Ball(mass, x, y, xv, yv, colour, size) {
     this.mass = mass;
     this.location = new Vector2(x, y);
     this.velocity = new Vector2(xv, yv);
-    this.acceleration = new Vector2(0, 0);
+    this.acceleration = new Vector2(0, 0.1);
     this.colour = colour;
     this.size = size;
-    //this.diameter = diameter;
+    this.normalVector = new Vector2()
 
     this.draw = function () {
         context.beginPath();
@@ -141,32 +148,28 @@ function Ball(mass, x, y, xv, yv, colour, size) {
     this.update = function () {
 
         if (this.location.x > width) {
-            //velocity.x *= -1;
             this.velocity.invertX();
             this.location.x = width;
         }
 
         if (this.location.x < 0) {
-            //velocity.x *= -1;
             this.velocity.invertX();
         }
 
         if (this.location.y > height) {
             this.velocity.y *= -1 * friction;
+            //this.velocity.invertY();
             this.location.y = height;
         }
 
         if ((this.location.y) < 0) {
-            //velocity.y *= -1;
             this.velocity.invertY();
         }
 
         this.velocity.addVector(this.acceleration);
         this.location.addVector(this.velocity);
-
+        collisionDetection();
         this.draw();
-
-
     };
 
     this.clear = function () {
@@ -176,90 +179,113 @@ function Ball(mass, x, y, xv, yv, colour, size) {
 
 /**
  * Create ball object and store in array balls[]
+ * Create attraction object and store in array attractors[]
  */
 function createObject() {
     for (let i = 0; i < numOfBalls; i++) {
-        let size = random(10, 50);
+        let mass = random(5, 15);
+        let size = mass * 2;
+
+        // random(0 + size, width - size)
+        // random(0 + size, height - size)
+
         ball = new Ball(
-            random(1, 5),
+            mass,
             random(0 + size, width - size),
             random(0 + size, height - size),
-            2,
             1,
+            2,
             colours[getRandomInt(colours.length)],
             size);
+
         balls.push(ball);
+        //console.log(ball);
     }
+}
+
+/**
+ * Create an attractor object
+ */
+function createAttractor() {
     for (let i = 0; i < numOfAttractors; i++) {
-        let att = new AttractionObject(width / 2, height / 2, 20);
+        let att = new AttractionObject(width / 2, height / 2, 30);
         attractors.push(att);
     }
 }
 
 /**
  * Animate ball objects to canvas
+ * Animate the attraction object if created
  */
 function animate() {
     requestAnimationFrame(animate);
     context.fillStyle = 'rgb(255,255,255)';
     context.fillRect(0, 0, width, height);
 
-    for (let i = 0; i < balls.length; i++) {
-        balls[i].update();
-        for (let i = 0; i < attractors.length; i++) {
-            attractors[i].drawAttraction();
-        }
+    for (let j = 0; j < attractors.length; j++) {
+        attractors[j].displayAttractor();
     }
 
+    for (let i = 0; i < balls.length; i++) {
+        balls[i].update();
+    }
 }
 
+/**
+ * Function that will check if objects collide
+ */
 function collisionDetection() {
-    for (let i = 0; i < balls.length; i++) {
-        for (let j = i - 1; j >= 0; j--) {
-            if (balls[i] !== balls[j]) {
-                let dx = balls[i].x - balls[j].x;
-                let dy = balls[i].y - balls[j].y;
-                let distance = Math.sqrt(dx * dx + dy * dy);
+    let checkCollision = false;
 
-                if (distance < balls[i].size + balls[j].size) {
-                    balls[j].colour = balls[i].colour = 'rgb(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) + ')';
-                    // balls[i].xv = -(balls[i].xv);
-                    // balls[i].yv = -(balls[i].yv);
-                    // balls[j].xv = -(balls[j].xv);
-                    // balls[j].yv = -(balls[j].yv);
-                }
+    for (let i = 0; i < balls.length; i++) {
+        for (let j = i + 1; j < balls.length; j++) {
+            let dx = balls[i].location.x - balls[j].location.x;
+            let dy = balls[i].location.y - balls[j].location.y;
+
+            let sumOfRadius = balls[i].size + balls[j].size;
+            let squareOfRadius = sumOfRadius * sumOfRadius;
+
+            let distanceSquared = (dx * dx) + (dy * dy);
+
+            if (distanceSquared <= squareOfRadius) {
+                console.log("collision");
             }
         }
     }
 }
 
-function collisionReaction() {
+function collided(ball) {
+
 
 }
+
+// function collisionResolver(ball1, ball2) {
+//     ball1.velocity *=-1;
+//     ball2.velocity *=-1;
+//
+// }
+
 
 /**
  * A force is passed through this function. This will then be divided by the mass of the object it's working with.
  * Force will then be added to acceleration of the object.
+ * Force = mass * acceleration
+ * Acceleration = force/mass
  */
 function force(force) {
-    for (let i = 0; i < balls.length; i++) {
-        force.divide(balls[i].mass);
-        balls[i].acceleration.addVector(force);
-    }
-}
 
-function angleOfEachObject() {
-    let angle = [];
     for (let i = 0; i < balls.length; i++) {
-        //balls[i].findAngle();
-        angle[i] = Math.floor(balls[i].location.findAngle());
-        console.log(angle[i]);
+        let acc = force.divide(balls[i].mass);
+        balls[i].acceleration.addVector(acc);
     }
 }
 
 
 createObject();
+//collisionDetection();
+createAttractor();
 force(gravity);
+//force(wind);
 animate();
 
 
