@@ -106,7 +106,7 @@ function AttractionObject(x, y, mass) {
 
     this.implementAttraction = function (ballObject) {
         let force = this.attractionLocation.subtractVector(ballObject.location);
-        let distance = force.length();
+        let distance = force.magnitude();
 
         let strengthOfAttraction = (this.gravity * this.attractionMass * ballObject.mass) / (distance * distance);
         force.multiply(strengthOfAttraction);
@@ -133,7 +133,6 @@ function Ball(mass, x, y, xv, yv, colour, size) {
     this.acceleration = new Vector2(0, 0.1);
     this.colour = colour;
     this.size = size;
-    this.normalVector = new Vector2()
 
     this.draw = function () {
         context.beginPath();
@@ -249,22 +248,45 @@ function collisionDetection() {
 
             if (distanceSquared <= squareOfRadius) {
                 console.log("collision");
+                collided(balls[i], balls[j]);
+                //console.log(balls[i]);
+                //console.log(balls[j]);
+
             }
         }
     }
 }
 
-function collided(ball) {
+/**
+ * http://www.vobarian.com/collisions/2dcollisions2.pdf
+ * @param ballA
+ * @param ballB
+ */
+function collided(ballA, ballB) {
 
+    let combinedMass = ballA.mass + ballB.mass;
+
+    let normalVector = new Vector2(ballB.location.x - ballA.location.x, ballB.location.y - ballA.location.y);
+    let unitVector = new Vector2(normalVector.x / normalVector.magnitude(), normalVector.y / normalVector.magnitude()); //un
+    //let unitVector = new Vector2(unitV.x, unitV.y); //un stored as vector2
+    let unitTangent = new Vector2(-unitVector.y, unitVector.x);
+
+    //these will store the dot products
+    let v1n = unitVector.dotProduct(ballA.velocity);
+    let v1t = unitTangent.dotProduct(ballA.velocity);
+    let v2n = unitVector.dotProduct(ballB.velocity);
+    let v2t = unitTangent.dotProduct(ballB.velocity);
+
+    let afterCollisionv1t = v1t;
+    let afterCollisionv2t = v2t;
+
+    let afterVelocityBallA = (v1n * (ballA.mass - ballB.mass) + (2 * ballB.mass * v2n)) / combinedMass;
+    let afterVelocityBallB = (v2n * (ballB.mass - ballA.mass) + (2 * ballA.mass * v1n)) / combinedMass;
+
+    ballB.location.addVector(unitVector);
+    ballA.location.addVector(unitTangent);
 
 }
-
-// function collisionResolver(ball1, ball2) {
-//     ball1.velocity *=-1;
-//     ball2.velocity *=-1;
-//
-// }
-
 
 /**
  * A force is passed through this function. This will then be divided by the mass of the object it's working with.
@@ -273,7 +295,6 @@ function collided(ball) {
  * Acceleration = force/mass
  */
 function force(force) {
-
     for (let i = 0; i < balls.length; i++) {
         let acc = force.divide(balls[i].mass);
         balls[i].acceleration.addVector(acc);
@@ -283,7 +304,7 @@ function force(force) {
 
 createObject();
 //collisionDetection();
-createAttractor();
+//createAttractor();
 force(gravity);
 //force(wind);
 animate();

@@ -82,7 +82,7 @@
 //         /!**
 //          * For loops to keep objects within canvas space
 //          *!/
-//         for (let i = 0; i < self.balls.length; ++i) {
+//         for (let i = 0; i < self.balls.magnitude; ++i) {
 //             self.balls[i].move();
 //             self.balls[i].drawBall(ctx);
 //

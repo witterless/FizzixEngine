@@ -5,11 +5,11 @@ export class Vector2 {
     }
 
     /**
-     * Finds length or magnitude of a vector
+     * Finds magnitude or magnitude of a vector
      * @returns {number}
      */
-    length() {
-        return Math.sqrt((this.x * this.x) + (this.y * this.y));
+    magnitude() {
+        return Math.sqrt(this.x * this.x + this.y * this.y);
     }
 
     add(num) {
@@ -387,7 +387,7 @@ export class Vector2 {
     }
 
     /**
-     * Returns dot product of vector as scalar amount
+     * Returns dot product of this vector and other vector as scalar amount
      * @param vector
      * @returns {number}
      */
@@ -442,6 +442,25 @@ export class Vector2 {
         };
     };
 
+    /**
+     *
+     * @param vector
+     * @returns {{x: number, y: number}}
+     */
+    normaliseVector() {
+        let mag = this.magnitude();
+        if (mag === 0) {
+            return {
+                x: 0,
+                y: 0
+            };
+        } else {
+            return {
+                x: this.x / mag,
+                y: this.y / mag
+            };
+        }
+    }
 }
 
 /**
