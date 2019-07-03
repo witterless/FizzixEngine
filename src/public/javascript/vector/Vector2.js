@@ -4,6 +4,36 @@ export class Vector2 {
         this.y = y;
     }
 
+
+    scaleMagnitude(num) {
+        let mag = this.magnitude();
+        let newMag = mag * num;
+        let a = this.findAngle();
+        let nx = Math.cos(a) * newMag;
+        let ny = Math.sin(a) * newMag;
+        // this.x = nx;
+        // this.y = ny;
+        return new Vector2(nx,ny);
+    }
+
+    reset(x, y) {
+        this.x = x;
+        this.y = y;
+        return {
+            x: this.x,
+            y: this.y
+        };
+    }
+
+    setVector(vector) {
+        this.x = vector.x;
+        this.y = vector.y;
+        return {
+            x: this.x,
+            y: this.y
+        };
+    }
+
     /**
      * Finds magnitude or magnitude of a vector
      * @returns {number}
@@ -487,3 +517,6 @@ let [x, y] = getObj2();
 // export default Vector2;
 
 //module.exports.Vector2 = Vector2;
+
+let norm = new Vector2(4, 5);
+console.log(norm.magnitude());

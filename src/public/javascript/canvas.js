@@ -1,3 +1,5 @@
+"use strict";
+
 import {Vector2} from "./vector/Vector2.js";
 
 /**
@@ -6,6 +8,7 @@ import {Vector2} from "./vector/Vector2.js";
  */
 let canvas = document.getElementById('myCanvas');
 let context = canvas.getContext('2d');
+
 
 //let width = canvas.width = window.innerWidth; //1536
 //let height = canvas.height = window.innerHeight; //722
@@ -27,7 +30,7 @@ let wind = new Vector2(0.5, 0);
 /**
  * Vars in relation to storing the ball object
  */
-let numOfBalls = 5;
+let numOfBalls = 2;
 let numOfAttractors = 1;
 let ball = null;
 let balls = [];
@@ -65,16 +68,37 @@ function random(min, max) {
  */
 function getMousePosition() {
     context.canvas.addEventListener('mousemove', function (event) {
-        mouse.x = event.clientX - context.canvas.offsetLeft;
-        mouse.y = event.clientY - context.canvas.offsetTop;
+        var rect = canvas.getBoundingClientRect();
+        mouse.x = event.clientX - rect.left;
+        mouse.y = event.clientY - rect.top;
         let mousePosition = document.getElementById('mouseposition');
         mousePosition.innerHTML = "x: " + mouse.x + " y: " + mouse.y;
     });
 }
 
+/**
+ * This function will allow user to choose how many ball objects will be in the canvas
+ */
+function getNumberOfBalls() {
+    let ballNum = document.getElementById("numofballs");
+    ballNum.innerHTML = "Number of Balls: " + numOfBalls;
+}
+
+function increaseBall() {
+    numOfBalls += 1;
+    console.log(numOfBalls);
+    let ballNum = document.getElementById("numofballs");
+    ballNum.innerHTML = "Number of Balls: " + numOfBalls;
+    addObject();
+}
+
+document.getElementById("addball").addEventListener("click", increaseBall);
+
 window.addEventListener('load', function () {
     getMousePosition();
+    //getNumberOfBalls();
 });
+
 
 /**
  * From MDN
@@ -134,41 +158,60 @@ function Ball(mass, x, y, xv, yv, colour, size) {
     this.colour = colour;
     this.size = size;
 
+
     this.draw = function () {
         context.beginPath();
         context.fillStyle = this.colour;
         //context.strokeStyle = 'black';
         context.arc(this.location.x, this.location.y, this.size, 0, 2 * Math.PI);
-        // context.stroke();
+        //context.stroke();
         context.fill();
         context.closePath();
     };
 
     this.update = function () {
 
-        if (this.location.x > width) {
-            this.velocity.invertX();
-            this.location.x = width;
+        // if (this.location.x > width) {
+        //     this.location.x = width;
+        //     this.velocity.invertX();
+        // }
+        //
+        // if (this.location.x < 0) {
+        //     this.location.x = 0;
+        //     this.velocity.invertX();
+        // }
+        //
+        // if (this.location.y > height) {
+        //     this.location.y = height;
+        //     this.velocity.y *= -1 * friction;
+        //     //this.velocity.invertY();
+        // }
+        //
+        // if ((this.location.y) < 0) {
+        //     this.location.y = 0;
+        //     this.velocity.invertY();
+        // }
+
+        let newVelocity = new Vector2(this.velocity.x, this.velocity.y); //.addVector(this.acceleration);
+        let newLocation = new Vector2(this.location.x, this.location.y).addVector(newVelocity);
+
+        let collision = collisionDetection();
+
+        if (!collision) {
+            this.velocity.setVector(newVelocity);
+            this.location.setVector(newLocation);
         }
 
-        if (this.location.x < 0) {
-            this.velocity.invertX();
-        }
-
-        if (this.location.y > height) {
-            this.velocity.y *= -1 * friction;
-            //this.velocity.invertY();
-            this.location.y = height;
-        }
-
-        if ((this.location.y) < 0) {
-            this.velocity.invertY();
-        }
-
-        this.velocity.addVector(this.acceleration);
-        this.location.addVector(this.velocity);
-        collisionDetection();
+        // else {
+        //     this.velocity.invert();
+        //     this.location.invert();
+        // }
         this.draw();
+
+        // this.velocity.addVector(this.acceleration);
+        // this.location.addVector(this.velocity);
+
+
     };
 
     this.clear = function () {
@@ -176,13 +219,16 @@ function Ball(mass, x, y, xv, yv, colour, size) {
     };
 }
 
+
+setInterval(collisionDetection, 3000);
+
 /**
  * Create ball object and store in array balls[]
  * Create attraction object and store in array attractors[]
  */
 function createObject() {
     for (let i = 0; i < numOfBalls; i++) {
-        let mass = random(5, 15);
+        let mass = random(5, 30);
         let size = mass * 2;
 
         // random(0 + size, width - size)
@@ -193,7 +239,32 @@ function createObject() {
             random(0 + size, width - size),
             random(0 + size, height - size),
             1,
-            2,
+            1,
+            colours[getRandomInt(colours.length)],
+            size);
+
+        balls.push(ball);
+        //console.log(ball);
+    }
+}
+
+/**
+ * This function will be called when a new ball has been added to the canvas by button click
+ */
+function addObject() {
+    for (let i = 0; i < 1; i++) {
+        let mass = random(5, 30);
+        let size = mass * 2;
+
+        // random(0 + size, width - size)
+        // random(0 + size, height - size)
+
+        ball = new Ball(
+            mass,
+            random(0 + size, width - size),
+            random(0 + size, height - size),
+            1,
+            1,
             colours[getRandomInt(colours.length)],
             size);
 
@@ -236,39 +307,44 @@ function animate() {
 function collisionDetection() {
     let checkCollision = false;
 
-    for (let i = 0; i < balls.length; i++) {
+    for (let i = 0; i < balls.length - 1; i++) {
         for (let j = i + 1; j < balls.length; j++) {
-            let dx = balls[i].location.x - balls[j].location.x;
-            let dy = balls[i].location.y - balls[j].location.y;
+            if (balls[j] != balls[i]) {
+                let dx = balls[i].location.x - balls[j].location.x;
+                let dy = balls[i].location.y - balls[j].location.y;
 
-            let sumOfRadius = balls[i].size + balls[j].size;
-            let squareOfRadius = sumOfRadius * sumOfRadius;
+                let sumOfRadius = balls[i].size + balls[j].size;
+                let squareOfRadius = sumOfRadius * sumOfRadius;
 
-            let distanceSquared = (dx * dx) + (dy * dy);
+                let distanceSquared = (dx * dx) + (dy * dy);
+                let distance = Math.sqrt(distanceSquared);
 
-            if (distanceSquared <= squareOfRadius) {
-                console.log("collision");
-                collided(balls[i], balls[j]);
-                //console.log(balls[i]);
-                //console.log(balls[j]);
+                if (distance <= sumOfRadius) {
+                    console.log("collision");
+                    checkCollision = true;
+                    calculateNewVelocities(balls[i], balls[j]);
 
+                } else {
+                    checkCollision = false;
+                }
             }
         }
     }
+    setTimeout(collisionDetection, 1000);
 }
 
 /**
- * http://www.vobarian.com/collisions/2dcollisions2.pdf
+ * ref: vobarian.com/collisions/2dcollisions2.pdf
  * @param ballA
  * @param ballB
  */
-function collided(ballA, ballB) {
+function calculateNewVelocities(ballA, ballB) {
 
+    //find the combined mass of each object
     let combinedMass = ballA.mass + ballB.mass;
 
     let normalVector = new Vector2(ballB.location.x - ballA.location.x, ballB.location.y - ballA.location.y);
     let unitVector = new Vector2(normalVector.x / normalVector.magnitude(), normalVector.y / normalVector.magnitude()); //un
-    //let unitVector = new Vector2(unitV.x, unitV.y); //un stored as vector2
     let unitTangent = new Vector2(-unitVector.y, unitVector.x);
 
     //these will store the dot products
@@ -283,11 +359,19 @@ function collided(ballA, ballB) {
     let afterVelocityBallA = (v1n * (ballA.mass - ballB.mass) + (2 * ballB.mass * v2n)) / combinedMass;
     let afterVelocityBallB = (v2n * (ballB.mass - ballA.mass) + (2 * ballA.mass * v1n)) / combinedMass;
 
-    ballB.location.addVector(unitVector);
-    ballA.location.addVector(unitTangent);
+    let afterv1n = unitVector.scaleMagnitude(afterVelocityBallA);
+    let afterv1t = unitTangent.scaleMagnitude(afterCollisionv1t);
+
+    let afterv2n = unitVector.scaleMagnitude(afterVelocityBallB);
+    let afterv2t = unitTangent.scaleMagnitude(afterCollisionv2t);
+
+    afterv1n.addVector(afterv1t);
+    afterv2n.addVector(afterv2t);
+
+    ballA.velocity.setVector(afterv1n);
+    ballB.velocity.setVector(afterv2n);
 
 }
-
 /**
  * A force is passed through this function. This will then be divided by the mass of the object it's working with.
  * Force will then be added to acceleration of the object.
@@ -303,9 +387,8 @@ function force(force) {
 
 
 createObject();
-//collisionDetection();
 //createAttractor();
-force(gravity);
+//force(gravity);
 //force(wind);
 animate();
 

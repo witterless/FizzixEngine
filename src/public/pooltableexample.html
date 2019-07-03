@@ -2,39 +2,29 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Fizzix Engine</title>
     <link rel="stylesheet" type="text/css" href="style/style.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
+    <title>Pool Game Example</title>
 </head>
 <body>
-
 <div class="container">
-    <div class="row align-items-center">
+    <div class="row">
         <div class="col">
-            <h1>Fizzix Engine</h1>
-            <canvas id="myCanvas" width="700" height="500"></canvas>
-        </div>
-        <div class="col">
-            <h3>Welcome to the Fizzix Engine</h3>
-            <p>Please select some demos below</p>
-
-            <h4>Mouse Position</h4>
-            <p id="mouseposition">x: 0 y: 0</p>
-
-            <h4 id="numofballs">Number of Balls</h4>
-            <button type="button" class="btn btn-primary" id="addball">Add a ball</button>
+            <h1 id="poolTitle">Pool Game Example</h1>
+            <canvas id="pooltable" width="900" height="510"></canvas>
         </div>
     </div>
     <div class="row">
         <div class="col">
-
+            <h4>Mouse Position</h4>
+            <p id="mouseposition">x: 0 y: 0</p>
         </div>
     </div>
 </div>
 
-<script type="module" src="javascript/canvas.js"></script>
+<script src="javascript/pooltable.js"></script>
 
 </body>
 </html>
