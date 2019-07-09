@@ -13,7 +13,7 @@ export class Vector2 {
         let ny = Math.sin(a) * newMag;
         // this.x = nx;
         // this.y = ny;
-        return new Vector2(nx,ny);
+        return new Vector2(nx, ny);
     }
 
     reset(x, y) {
@@ -75,6 +75,7 @@ export class Vector2 {
         this.y -= num;
 
         return {
+            //return new Vector2(this.x,this.y)
             x: this.x,
             y: this.y
         };
@@ -232,10 +233,11 @@ export class Vector2 {
         this.x -= vector.x;
         this.y -= vector.y;
 
-        return {
-            x: this.x,
-            y: this.y
-        };
+        return new Vector2(this.x,this.y);
+        // return {
+        //     x: this.x,
+        //     y: this.y
+        // };
     }
 
     /**
@@ -517,6 +519,3 @@ let [x, y] = getObj2();
 // export default Vector2;
 
 //module.exports.Vector2 = Vector2;
-
-let norm = new Vector2(4, 5);
-console.log(norm.magnitude());

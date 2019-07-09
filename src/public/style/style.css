@@ -1,28 +1,47 @@
-body {
-    font-family: Arial, Calibri, serif;
+/*body {*/
+/*    font-family: Arial, Calibri, serif;*/
+/*    !*background-color: darkgray;*!*/
+/*}*/
+
+html, button, input, select, textarea,
+.pure-g [class *= "pure-u"] {
+    /* Set your content font stack here: */
+    font-family: Georgia, Times, "Times New Roman", serif;
+}
+
+.header{
+    background-color: black;
+    color: white;
+}
+.header h1 {
+    padding-left: 20px;
+}
+
+.main-body {
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 .container {
-    margin: 15px;
-    background-image: linear-gradient(to bottom right, #dddddd, #ffffff);
+    background-color: aliceblue;
     border-radius: 5px;
-    align-items: center;
-    justify-content: center;
+    margin: 0 auto;
+    padding:10px;
 }
 
 #myCanvas {
-    border: 1px solid black;
+/ / border: 1 px solid black;
 }
 
-h1 {
-    color: slategrey;
+.demo-button {
+    margin: 5px;
 }
 
 /*#pooltable {*/
 /*    border: 1px solid black;*/
 /*}*/
 
-#poolTitle{
+#poolTitle {
     margin-bottom: 10px;
 }
 

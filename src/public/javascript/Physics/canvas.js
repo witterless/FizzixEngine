@@ -1,6 +1,39 @@
 "use strict";
 
-import {Vector2} from "./vector/Vector2.js";
+import {Vector2} from "../vector/Vector2.js";
+
+
+/**
+ * Getting and setting the fizzix world properties so they can be used elsewhere in the file
+ * http://www.ecma-international.org/ecma-262/6.0/index.html#sec-method-definitions
+ * @constructor
+ */
+// function FizzixWorld() {
+//     this.canvas; // = document.getElementById('myCanvas');
+//     this.context; //= canvas.getContext('2d');
+//     this.width;
+//     this.height;
+//
+//     this.getCanvas = function(){
+//         return this.context;
+//     };
+//     this.setCanvas = function (canvas) {
+//         this.canvas = canvas;
+//     };
+//     this.getContext = function () {
+//         return this.context;
+//     };
+//     this.setContext = function (context) {
+//         this.context = context;
+//     };
+//     this.getWidth = function () {
+//         return this.width;
+//     };
+//     this.setWidth = function (width) {
+//         this.width = width;
+//     };
+//
+// }
 
 /**
  * Gets the canvas element from Index page
@@ -8,10 +41,6 @@ import {Vector2} from "./vector/Vector2.js";
  */
 let canvas = document.getElementById('myCanvas');
 let context = canvas.getContext('2d');
-
-
-//let width = canvas.width = window.innerWidth; //1536
-//let height = canvas.height = window.innerHeight; //722
 
 /**
  * Store the height and width of canvas
@@ -36,22 +65,25 @@ let ball = null;
 let balls = [];
 let attractors = [];
 
-/**
- * Store the mouse in var
- * @type {{x: number, y: number}}
- */
-let mouse = {
-    x: width / 2,
-    y: height / 2
-};
+// /**
+//  * Store the mouse in var
+//  * @type {{x: number, y: number}}
+//  */
+// let mouse = {
+//     x: width / 2,
+//     y: height / 2
+// };
 
-let colours = ['#7CEA9C',
-    '#55D6BE',
-    '#2E5EAA',
-    '#665883',
-    '#593959',
-    '#DDDBF1',
-    '#FFB400'];
+/**
+ * Colours of ball objects
+ * @type {string[]}
+ */
+let colours = ['#7CEA9C', //colours should be in canvas
+    '#4C5B5C',
+    '#657ED4',
+    '#99B2DD',
+    '#BBC2E2',
+    '#D1FAFF'];
 
 /**
  * Function that will return random number between 2 numbers
@@ -68,35 +100,50 @@ function random(min, max) {
  */
 function getMousePosition() {
     context.canvas.addEventListener('mousemove', function (event) {
-        var rect = canvas.getBoundingClientRect();
-        mouse.x = event.clientX - rect.left;
-        mouse.y = event.clientY - rect.top;
-        let mousePosition = document.getElementById('mouseposition');
+        let rect = canvas.getBoundingClientRect();
+        mouse.x = Math.round(event.clientX - rect.left);
+        mouse.y = Math.round(event.clientY - rect.top);
+        let mousePosition = document.getElementById('mouse-position');
         mousePosition.innerHTML = "x: " + mouse.x + " y: " + mouse.y;
     });
 }
+
 
 /**
  * This function will allow user to choose how many ball objects will be in the canvas
  */
 function getNumberOfBalls() {
-    let ballNum = document.getElementById("numofballs");
+    let ballNum = document.getElementById("num-of-balls");
     ballNum.innerHTML = "Number of Balls: " + numOfBalls;
 }
 
 function increaseBall() {
     numOfBalls += 1;
     console.log(numOfBalls);
-    let ballNum = document.getElementById("numofballs");
+    let ballNum = document.getElementById("num-of-balls");
     ballNum.innerHTML = "Number of Balls: " + numOfBalls;
     addObject();
 }
 
-document.getElementById("addball").addEventListener("click", increaseBall);
+/**
+ * function to clear the canvas of all balls
+ */
+function clearCanvas() {
+    for (let i = 0; i < balls.length; i++) {
+        context.clearRect(0, 0, width, height);
+        numOfBalls = 0;
+        let ballNum = document.getElementById("num-of-balls");
+        ballNum.innerHTML = "Number of Balls: " + numOfBalls;
+
+    }
+}
+
+document.getElementById("add-ball").addEventListener("click", increaseBall);
+document.getElementById("clear-demo").addEventListener("click", removeBallObject);
 
 window.addEventListener('load', function () {
-    getMousePosition();
-    //getNumberOfBalls();
+    //getMousePosition();
+    getNumberOfBalls();
 });
 
 
@@ -136,7 +183,6 @@ function AttractionObject(x, y, mass) {
         force.multiply(strengthOfAttraction);
         return force;
     }
-
 }
 
 /**
@@ -154,10 +200,9 @@ function Ball(mass, x, y, xv, yv, colour, size) {
     this.mass = mass;
     this.location = new Vector2(x, y);
     this.velocity = new Vector2(xv, yv);
-    this.acceleration = new Vector2(0, 0.1);
+    //this.acceleration = new Vector2(0, 0.1);
     this.colour = colour;
     this.size = size;
-
 
     this.draw = function () {
         context.beginPath();
@@ -171,28 +216,28 @@ function Ball(mass, x, y, xv, yv, colour, size) {
 
     this.update = function () {
 
-        // if (this.location.x > width) {
-        //     this.location.x = width;
-        //     this.velocity.invertX();
-        // }
-        //
-        // if (this.location.x < 0) {
-        //     this.location.x = 0;
-        //     this.velocity.invertX();
-        // }
-        //
-        // if (this.location.y > height) {
-        //     this.location.y = height;
-        //     this.velocity.y *= -1 * friction;
-        //     //this.velocity.invertY();
-        // }
-        //
-        // if ((this.location.y) < 0) {
-        //     this.location.y = 0;
-        //     this.velocity.invertY();
-        // }
+        if (this.location.x > width) {
+            this.location.x = width;
+            this.velocity.invertX();
+        }
 
-        let newVelocity = new Vector2(this.velocity.x, this.velocity.y); //.addVector(this.acceleration);
+        if (this.location.x < 0) {
+            this.location.x = 0;
+            this.velocity.invertX();
+        }
+
+        if (this.location.y > height) {
+            this.location.y = height;
+            this.velocity.y *= -1 * friction;
+            //this.velocity.invertY();
+        }
+
+        if ((this.location.y) < 0) {
+            this.location.y = 0;
+            this.velocity.invertY();
+        }
+
+        let newVelocity = new Vector2(this.velocity.x, this.velocity.y);
         let newLocation = new Vector2(this.location.x, this.location.y).addVector(newVelocity);
 
         let collision = collisionDetection();
@@ -202,25 +247,20 @@ function Ball(mass, x, y, xv, yv, colour, size) {
             this.location.setVector(newLocation);
         }
 
-        // else {
-        //     this.velocity.invert();
-        //     this.location.invert();
-        // }
         this.draw();
 
         // this.velocity.addVector(this.acceleration);
         // this.location.addVector(this.velocity);
-
-
     };
 
     this.clear = function () {
         context.clearRect(0, 0, width, height);
     };
+
 }
 
 
-setInterval(collisionDetection, 3000);
+//setInterval(collisionDetection);
 
 /**
  * Create ball object and store in array balls[]
@@ -238,14 +278,15 @@ function createObject() {
             mass,
             random(0 + size, width - size),
             random(0 + size, height - size),
-            1,
-            1,
+            random(-1, 1),
+            random(-1, 1),
             colours[getRandomInt(colours.length)],
             size);
 
         balls.push(ball);
         //console.log(ball);
     }
+
 }
 
 /**
@@ -263,13 +304,25 @@ function addObject() {
             mass,
             random(0 + size, width - size),
             random(0 + size, height - size),
-            1,
-            1,
+            random(-1, 1),
+            random(-1, 1),
             colours[getRandomInt(colours.length)],
             size);
 
         balls.push(ball);
         //console.log(ball);
+    }
+}
+
+/**
+ * Function that will remove ball 'object' from the balls array
+ */
+function removeBallObject() {
+    for (let i = 0; i < balls.length; i++) {
+        numOfBalls = 0;
+        balls.pop();
+        let ballNum = document.getElementById("num-of-balls");
+        ballNum.innerHTML = "Number of Balls: " + numOfBalls;
     }
 }
 
@@ -289,7 +342,7 @@ function createAttractor() {
  */
 function animate() {
     requestAnimationFrame(animate);
-    context.fillStyle = 'rgb(255,255,255)';
+    context.fillStyle = 'rgb(0,0,0)';
     context.fillRect(0, 0, width, height);
 
     for (let j = 0; j < attractors.length; j++) {
@@ -306,10 +359,12 @@ function animate() {
  */
 function collisionDetection() {
     let checkCollision = false;
+    // let collisionPositionBallA = 0;
+    // let collisionPositionBallB = 0;
 
     for (let i = 0; i < balls.length - 1; i++) {
         for (let j = i + 1; j < balls.length; j++) {
-            if (balls[j] != balls[i]) {
+            if (balls[j] !== balls[i]) {
                 let dx = balls[i].location.x - balls[j].location.x;
                 let dy = balls[i].location.y - balls[j].location.y;
 
@@ -319,22 +374,65 @@ function collisionDetection() {
                 let distanceSquared = (dx * dx) + (dy * dy);
                 let distance = Math.sqrt(distanceSquared);
 
-                if (distance <= sumOfRadius) {
-                    console.log("collision");
-                    checkCollision = true;
+                if (distanceSquared <= squareOfRadius) {
+                    //first resolve the positions of the balls so they don't overlap and cause too many collisions
+                    collisionResolver(balls[i], balls[j]);
+                    //balls can finally collide
                     calculateNewVelocities(balls[i], balls[j]);
 
+                    console.log("collision");
+                    checkCollision = true;
                 } else {
                     checkCollision = false;
                 }
             }
         }
     }
-    setTimeout(collisionDetection, 1000);
+
+    //setTimeout(collisionDetection);
 }
 
 /**
- * ref: vobarian.com/collisions/2dcollisions2.pdf
+ * Position resolving so the balls won't cause continuous collisions due to overlapping
+ *
+ * REF: https://gamedevelopment.tutsplus.com/tutorials/how-to-create-a-custom-2d-physics-engine-the-basics-and-impulse-resolution--gamedev-6331
+ * @param ballA
+ * @param ballB
+ */
+function collisionResolver(ballA, ballB) {
+
+    const percent = 0.2; //this will make the collision look smoother
+
+    let distanceVector = new Vector2(ballB.location.x - ballA.location.x, ballB.location.y - ballA.location.y);
+    let mag = distanceVector.magnitude();
+    let radii = ballA.size + ballB.size;
+    console.log(radii);
+
+    //find the overlap of the balls - penetration depth
+    let penetrationDepth = radii - mag;
+    console.log(penetrationDepth);
+
+    //find the inverse mass of both colliding balls
+    let ballAInverseMass = 1 / ballA.mass;
+    let ballBInverseMass = 1 / ballB.mass;
+
+    let newBallAPosition = distanceVector.multiply(penetrationDepth * percent * ballAInverseMass);
+    let newBallBPosition = distanceVector.multiply(penetrationDepth * percent * ballBInverseMass);
+
+    let ballALocation = ballA.location.subtractVector(newBallAPosition);
+    let ballBLocation = ballB.location.subtractVector(newBallBPosition);
+
+    ballA.location.setVector(ballALocation);
+    ballB.location.setVector(ballBLocation);
+
+    //calculateNewVelocities(ballA, ballB);
+
+}
+
+
+/**
+ * Once they positions have been resolved the balls can react to collision
+ * REF: vobarian.com/collisions/2dcollisions2.pdf
  * @param ballA
  * @param ballB
  */
@@ -370,8 +468,8 @@ function calculateNewVelocities(ballA, ballB) {
 
     ballA.velocity.setVector(afterv1n);
     ballB.velocity.setVector(afterv2n);
-
 }
+
 /**
  * A force is passed through this function. This will then be divided by the mass of the object it's working with.
  * Force will then be added to acceleration of the object.
@@ -385,12 +483,16 @@ function force(force) {
     }
 }
 
+for (let i = 0; i < numOfBalls; i++) {
+    addObject();
+}
 
-createObject();
+
 //createAttractor();
 //force(gravity);
 //force(wind);
 animate();
+
 
 
 
