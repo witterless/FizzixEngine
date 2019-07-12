@@ -6,7 +6,7 @@ import {Vector2} from "./vector/Vector2.js";
  * Gets the canvas element from Index page
  * @type {HTMLElement}
  */
-let canvas = document.getElementById('demoCanvas');
+let canvas = document.getElementById('particles');
 let context = canvas.getContext('2d');
 
 /**
@@ -16,19 +16,24 @@ let width = canvas.width;
 let height = canvas.height;
 
 /**
- * Add gravity and wind as global variables
- * @type {Vector2}
- */
-let gravity = new Vector2(0, 1.5);
-let wind = new Vector2(0.5, 0);
-let friction = 0.99;
-
-/**
  * Vars in relation to storing the ball object
  */
-let numOfBalls = 2;
+let numOfBalls = 60;
 let ball = null;
 let balls = [];
+
+/**
+ * Colours of ball objects
+ * @type {string[]}
+ */
+let colours = ['#42ED4A', //colours should be in canvas
+    '#FF5733',
+    '#EDEA42',
+    '#D40A2F',
+    '#0CD7DE',
+    '#630DD8',
+    '#B3B6B7',
+    '#FBFCFC'];
 
 /**
  * Function that will return random number between 2 numbers
@@ -40,6 +45,7 @@ function random(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+
 /**
  * From MDN
  * Will take a number and return a value up to that number
@@ -49,15 +55,6 @@ function random(min, max) {
 function getRandomInt(max) {
     return Math.floor(Math.random() * Math.floor(max));
 }
-
-/**
- * Colours of ball objects
- * @type {string[]}
- */
-let colours = ['#de00ea',
-    '#3366d6',
-    '#3daa04',
-    '#bebf00'];
 
 
 /**
@@ -78,6 +75,7 @@ function Ball(mass, x, y, xv, yv, colour, size) {
     this.acceleration = new Vector2(0, 0.1);
     this.colour = colour;
     this.size = size;
+    //this.ballsArray = [];
 
     this.draw = function () {
         context.beginPath();
@@ -91,33 +89,17 @@ function Ball(mass, x, y, xv, yv, colour, size) {
 
     this.update = function () {
 
-        if (this.location.x > width) {
-            this.location.x = width;
-            this.velocity.x *= -1 * friction
-            //this.velocity.invertX();
-        }
-
-        if (this.location.x < 0) {
-            this.location.x = 0;
-            this.velocity.invertX();
-        }
-
-        if (this.location.y > height) {
-            this.location.y = height;
-            this.velocity.y *= -1 * friction;
-            //this.velocity.invertY();
-        }
-
-        if ((this.location.y) < 0) {
-            this.location.y = 0;
-            this.velocity.invertY();
-        }
-
         let newVelocity = new Vector2(this.velocity.x, this.velocity.y).addVector(this.acceleration);
         let newLocation = new Vector2(this.location.x, this.location.y).addVector(newVelocity);
 
         this.velocity.setVector(newVelocity);
         this.location.setVector(newLocation);
+
+        let particleIsDead = false;
+
+        // if (this.location.y > height) {
+        //     particleIsDead = true;
+        // }
 
         this.draw();
 
@@ -128,58 +110,34 @@ function Ball(mass, x, y, xv, yv, colour, size) {
     this.clear = function () {
         context.clearRect(0, 0, width, height);
     };
+
 }
 
-/**
- * Create ball object and store in array balls[]
- * Create attraction object and store in array attractors[]
- */
-function createObject() {
-    for (let i = 0; i < numOfBalls; i++) {
-        let mass = random(5, 20);
-        let size = mass * 2;
+//setInterval(collisionDetection);
 
-        // random(0 + size, width - size)
-        // random(0 + size, height - size)
-
-        ball = new Ball(
-            mass,
-            random(0 + size, width - size),
-            random(0 + size, height - size),
-            random(-1, 1),
-            random(-1, 1),
-            colours[getRandomInt(colours.length)],
-            size);
-
-        balls.push(ball);
-        //console.log(ball);
-    }
-}
 
 /**
- * Add ball object
+ * This function will be called when a new ball has been added to the canvas by button click
  */
 function addObject() {
     for (let i = 0; i < numOfBalls; i++) {
-        let mass = random(5, 30);
-        let size = mass * 2;
-
-        // random(0 + size, width - size)
-        // random(0 + size, height - size)
-
         ball = new Ball(
-            mass,
-            random(0 + size, width - size),
-            random(0 + size, height - size),
-            random(-1, 1),
-            random(-1, 1),
+            3,
+            300,
+            225,
+            random(-6, 6),
+            random(-6, 6),
             colours[getRandomInt(colours.length)],
-            size);
-
+            6);
         balls.push(ball);
         //console.log(ball);
     }
-    ;
+}
+
+function fireworks(){
+    canvas.onclick = function() {
+        addObject();
+    }
 }
 
 /**
@@ -188,7 +146,7 @@ function addObject() {
  */
 function animate() {
     requestAnimationFrame(animate);
-    context.fillStyle = 'rgb(0,0,0)';
+    context.fillStyle = '#040020';
     context.fillRect(0, 0, width, height);
 
     for (let i = 0; i < balls.length; i++) {
@@ -209,7 +167,16 @@ function force(force) {
     }
 }
 
+let gravity = new Vector2(0, 0.1);
+
 addObject();
+fireworks();
+//createAttractor();
 force(gravity);
-force(wind);
+//force(wind);
 animate();
+
+
+
+
+

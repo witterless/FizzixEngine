@@ -28,10 +28,7 @@ export class Vector2 {
     setVector(vector) {
         this.x = vector.x;
         this.y = vector.y;
-        return {
-            x: this.x,
-            y: this.y
-        };
+        return new Vector2(this.x, this.y);
     }
 
     /**
@@ -103,10 +100,7 @@ export class Vector2 {
         this.x *= num;
         this.y *= num;
 
-        return {
-            x: this.x,
-            y: this.y
-        };
+        return new Vector2(this.x, this.y);
     }
 
     multiplyX(num) {
@@ -233,7 +227,7 @@ export class Vector2 {
         this.x -= vector.x;
         this.y -= vector.y;
 
-        return new Vector2(this.x,this.y);
+        return new Vector2(this.x, this.y);
         // return {
         //     x: this.x,
         //     y: this.y

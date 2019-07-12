@@ -2,39 +2,6 @@
 
 import {Vector2} from "../vector/Vector2.js";
 
-
-/**
- * Getting and setting the fizzix world properties so they can be used elsewhere in the file
- * http://www.ecma-international.org/ecma-262/6.0/index.html#sec-method-definitions
- * @constructor
- */
-// function FizzixWorld() {
-//     this.canvas; // = document.getElementById('myCanvas');
-//     this.context; //= canvas.getContext('2d');
-//     this.width;
-//     this.height;
-//
-//     this.getCanvas = function(){
-//         return this.context;
-//     };
-//     this.setCanvas = function (canvas) {
-//         this.canvas = canvas;
-//     };
-//     this.getContext = function () {
-//         return this.context;
-//     };
-//     this.setContext = function (context) {
-//         this.context = context;
-//     };
-//     this.getWidth = function () {
-//         return this.width;
-//     };
-//     this.setWidth = function (width) {
-//         this.width = width;
-//     };
-//
-// }
-
 /**
  * Gets the canvas element from Index page
  * @type {HTMLElement}
@@ -203,6 +170,7 @@ function Ball(mass, x, y, xv, yv, colour, size) {
     //this.acceleration = new Vector2(0, 0.1);
     this.colour = colour;
     this.size = size;
+    this.ballsArray = [];
 
     this.draw = function () {
         context.beginPath();
@@ -294,8 +262,8 @@ function createObject() {
  */
 function addObject() {
     for (let i = 0; i < 1; i++) {
-        let mass = random(5, 30);
-        let size = mass * 2;
+        let mass = random(10, 40);
+        let size = mass;
 
         // random(0 + size, width - size)
         // random(0 + size, height - size)
@@ -310,6 +278,8 @@ function addObject() {
             size);
 
         balls.push(ball);
+        console.log(mass);
+        console.log(size);
         //console.log(ball);
     }
 }
@@ -342,7 +312,7 @@ function createAttractor() {
  */
 function animate() {
     requestAnimationFrame(animate);
-    context.fillStyle = 'rgb(0,0,0)';
+    context.fillStyle = '#040020';
     context.fillRect(0, 0, width, height);
 
     for (let j = 0; j < attractors.length; j++) {
@@ -380,7 +350,7 @@ function collisionDetection() {
                     //balls can finally collide
                     calculateNewVelocities(balls[i], balls[j]);
 
-                    console.log("collision");
+                    //console.log("collision");
                     checkCollision = true;
                 } else {
                     checkCollision = false;
@@ -404,17 +374,32 @@ function collisionResolver(ballA, ballB) {
     const percent = 0.2; //this will make the collision look smoother
 
     let distanceVector = new Vector2(ballB.location.x - ballA.location.x, ballB.location.y - ballA.location.y);
+    // let relativeVel = new Vector2(ballB.velocity.x - ballA.velocity.x, ballB.velocity.y - ballA.velocity.y);
+    // let velAlongNormal = relativeVel.dotProduct(distanceVector);
+
     let mag = distanceVector.magnitude();
     let radii = ballA.size + ballB.size;
-    console.log(radii);
 
     //find the overlap of the balls - penetration depth
     let penetrationDepth = radii - mag;
-    console.log(penetrationDepth);
 
     //find the inverse mass of both colliding balls
-    let ballAInverseMass = 1 / ballA.mass;
-    let ballBInverseMass = 1 / ballB.mass;
+
+    let ballAInverseMass;
+    let ballBInverseMass;
+
+    //avoid dividing by 0
+    if (ballA.mass > 0) {
+        ballAInverseMass = 1 / ballA.mass;
+    } else {
+        ballAInverseMass = 0;
+    }
+
+    if (ballB.mass > 0) {
+        ballBInverseMass = 1 / ballB.mass;
+    } else {
+        ballBInverseMass = 0;
+    }
 
     let newBallAPosition = distanceVector.multiply(penetrationDepth * percent * ballAInverseMass);
     let newBallBPosition = distanceVector.multiply(penetrationDepth * percent * ballBInverseMass);
@@ -424,8 +409,6 @@ function collisionResolver(ballA, ballB) {
 
     ballA.location.setVector(ballALocation);
     ballB.location.setVector(ballBLocation);
-
-    //calculateNewVelocities(ballA, ballB);
 
 }
 
