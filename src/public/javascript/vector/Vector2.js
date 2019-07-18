@@ -1,3 +1,4 @@
+
 export class Vector2 {
     constructor(x, y) {
         this.x = x;
@@ -5,6 +6,12 @@ export class Vector2 {
     }
 
 
+    /**
+     * scale a vector by a sum
+     * called in the calculate velocity function in Fizzix
+     * @param num
+     * @returns {Vector2}
+     */
     scaleMagnitude(num) {
         let mag = this.magnitude();
         let newMag = mag * num;
@@ -19,15 +26,16 @@ export class Vector2 {
     reset(x, y) {
         this.x = x;
         this.y = y;
-        return {
-            x: this.x,
-            y: this.y
-        };
+        return new Vector2(this.x, this.y);
+        // return {
+        //     x: this.x,
+        //     y: this.y
+        // };
     }
 
     setVector(vector) {
-        this.x = vector.x;
-        this.y = vector.y;
+        this.x = Math.round(vector.x);
+        this.y = Math.round(vector.y);
         return new Vector2(this.x, this.y);
     }
 
@@ -129,11 +137,11 @@ export class Vector2 {
             this.x = 0;
             this.y = 0;
         }
-
-        return {
-            x: this.x,
-            y: this.y
-        };
+        return new Vector2(this.x, this.y);
+        // return {
+        //     x: this.x,
+        //     y: this.y
+        // };
     }
 
     divideX(num) {
@@ -184,10 +192,11 @@ export class Vector2 {
         this.x += vector.x;
         this.y += vector.y;
 
-        return {
-            x: this.x,
-            y: this.y
-        };
+        return new Vector2(this.x, this.y);
+        // return {
+        //     x: this.x,
+        //     y: this.y
+        // };
     }
 
     /**
@@ -418,8 +427,9 @@ export class Vector2 {
      * @returns {number}
      */
     dotProduct(vector) {
-        return ((this.x * vector.x) + (this.y * vector.y));
+        return (this.x * vector.x) + (this.y * vector.y);
     };
+
 
     /**
      * Returns crossProduct as a scalar amount
