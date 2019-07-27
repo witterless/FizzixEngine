@@ -316,10 +316,10 @@ function particlesAndGravity() {
          * This will be for adding random ball object to the canvas (user can click button)
          */
         addRandomObject() {
-            let setSize = World.random(10,25);
+            let setSize = World.random(10, 25);
             let setMass = setSize;
             let setX = World.random(0, this.width);
-            let setY = World.random(0, this.height);
+            let setY = 0;
             let setXV = 0;
             let setXY = 0;
             let setColour = '#' + (Math.random() * 0xFFFFFF << 0).toString(16); //Sourced from https://stackoverflow.com/questions/5092808/how-do-i-randomly-generate-html-hex-color-codes-using-javascript
@@ -358,11 +358,11 @@ function particlesAndGravity() {
              */
             Fizzix.applyForce(gravity, ball);
 
+
             if (ball.location.y > this.height) {
                 ball.location.y = this.height;
-                //ball.velocity.invertY();
-                Fizzix.setFriction(ball);
-                //ball.velocity.y /= 2;
+                ball.velocity.invertY();
+                //Fizzix.setFriction(ball);
             }
 
             /**
@@ -417,55 +417,24 @@ function projectile() {
             // Set up world
             let balls = [
                 {
-                    random: true
+                    setMass: 30,
+                    setX: 30,
+                    setY: this.height - 30,
+                    setXV: 2,
+                    setXY: -4,
+                    setColour: '#b6ee92',
+                    setSize: 30,
+                    setRestitution: 0.1
                 },
                 {
-                    random: true
-                },
-                {
-                    random: true
-                },
-                {
-                    random: true
-                },
-                {
-                    random: true
-                },
-                {
-                    random: true
-                },
-                {
-                    random: true
-                },
-                {
-                    random: true
-                },
-                {
-                    random: true
-                },
-                {
-                    random: true
-                },
-                {
-                    random: true
-                },
-                {
-                    random: true
-                },
-                {
-                    random: true
-                },
-                {
-                    random: true
-                },
-                {
-                    random: true
-                },
-                {
-                    random: true
-                },
-                {
-                    random: true
+                    setMass: 20,
+                    setX: 500,
+                    setY: this.height,
+                    setXV: 0,
+                    setXY: 0,
+                    setColour: '#ee0200',
+                    setSize: 20,
+                    setRestitution: 0.1
                 },
 
             ];
@@ -577,13 +546,7 @@ function projectile() {
              * Create gravity as a vector
              * @type {Vector2}
              */
-            let gravity = new Vector2(0, 5);
-            let friction = 0.79;
-
-            /**
-             * Apply gravity as a force using fizzix method
-             */
-            Fizzix.applyForce(gravity, ball);
+            let gravity = new Vector2(0, 1);
 
             if (ball.location.y > this.height) {
                 ball.location.y = this.height;
@@ -599,15 +562,19 @@ function projectile() {
             ball.acceleration = new Vector2(0, 0); //reset acceleration
             let newLocation = new Vector2(ball.location.x, ball.location.y).addVector(newVelocity);
 
-            Fizzix.checkCollision(ball, i, ballsArray);
+            let collided = Fizzix.checkCollision(ball, i, ballsArray);
 
             /**
-             * if this returns false then velocity will stay the same and location will be updated according to set velocity
-             * @return boolean
+             * Apply gravity as a force using fizzix method
              */
+            Fizzix.applyForce(gravity, ball);
+
             ball.velocity.setVector(newVelocity);
             ball.location.setVector(newLocation);
 
+            if (collided) {
+
+            }
         };
 
         /**
@@ -629,9 +596,23 @@ function projectile() {
             this.ballsArray = [];
         };
     }
+
     new DemoPage('demo-canvas');
 }
 
-// ballsMovingTowardsEachOther();
-particlesAndGravity();
-// projectile();
+document.getElementById('projectile-page').onclick = function () {
+    projectile();
+};
+
+document.getElementById('gravity-page').onclick = function () {
+    particlesAndGravity();
+};
+
+document.getElementById('friction-page').onclick = function () {
+
+};
+
+document.getElementById('friction-page').onclick = function () {
+
+};
+

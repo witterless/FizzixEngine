@@ -422,10 +422,12 @@ export class Fizzix {
     static setFriction(ball) {
         //friction acts in the opposite direction of velocity of so can find this by inverting velocity vector
         let friction = ball.velocity;
+        console.log(friction);
         friction.invert();
+        console.log(friction);
 
         // using formula for friction - creating the normal and coefficient of friction
-        let coefficientOfFriction = 0.3;
+        let coefficientOfFriction = 0.8;
         let normal = 1;
 
         //convert scalar to vector
@@ -433,8 +435,9 @@ export class Fizzix {
         let finalFriction = normalisedFriction.multiply(normal * coefficientOfFriction);
 
         //apply this as a force
-        this.applyForce(finalFriction, ball);
+        ball.velocity.subtractVector(finalFriction);
+
     }
 }
 
-new Canvas('myCanvas');
+// new Canvas('myCanvas');
