@@ -604,7 +604,7 @@ document.getElementById('projectile-page').onclick = function () {
     projectile();
 };
 
-document.getElementById('gravity-page').onclick = function () {
+document.getElementById('particles-page').onclick = function () {
     particlesAndGravity();
 };
 
@@ -612,7 +612,7 @@ document.getElementById('friction-page').onclick = function () {
 
 };
 
-document.getElementById('friction-page').onclick = function () {
-
+document.getElementById('head-on-collision').onclick = function () {
+    ballsMovingTowardsEachOther();
 };
 
