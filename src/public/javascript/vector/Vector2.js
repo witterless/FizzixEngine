@@ -1,10 +1,13 @@
-
 export class Vector2 {
+    /**
+     * Constructor for the vector class
+     * @param x
+     * @param y
+     */
     constructor(x, y) {
         this.x = x;
         this.y = y;
     }
-
 
     /**
      * scale a vector by a sum
@@ -23,19 +26,9 @@ export class Vector2 {
         return new Vector2(nx, ny);
     }
 
-    reset(x, y) {
-        this.x = x;
-        this.y = y;
-        return new Vector2(this.x, this.y);
-        // return {
-        //     x: this.x,
-        //     y: this.y
-        // };
-    }
-
     setVector(vector) {
-        this.x = Math.round(vector.x);
-        this.y = Math.round(vector.y);
+        this.x = vector.x;
+        this.y = vector.y;
         return new Vector2(this.x, this.y);
     }
 
@@ -44,7 +37,7 @@ export class Vector2 {
      * @returns {number}
      */
     magnitude() {
-        return Math.sqrt(this.x * this.x + this.y * this.y);
+        return Math.sqrt((this.x * this.x) + (this.y * this.y));
     }
 
     add(num) {
@@ -123,10 +116,7 @@ export class Vector2 {
     multiplyY(num) {
         this.y *= num;
 
-        return {
-            x: this.x,
-            y: this.y
-        };
+        return new Vector2(this.x, this.y);
     }
 
     divide(num) {
@@ -169,21 +159,6 @@ export class Vector2 {
     }
 
     /**
-     * Scale vector using scalar amount
-     * @param num
-     * @returns {{x: *, y: *}}
-     */
-    scale(num) {
-        this.x *= num;
-        this.y *= num;
-
-        return {
-            x: this.x,
-            y: this.y
-        };
-    }
-
-    /**
      * Add one vector on to another
      * @param vector
      * @returns {{x: *, y: *}}
@@ -192,11 +167,8 @@ export class Vector2 {
         this.x += vector.x;
         this.y += vector.y;
 
-        return new Vector2(this.x, this.y);
-        // return {
-        //     x: this.x,
-        //     y: this.y
-        // };
+        //return new Vector2(this.x, this.y);
+        return this;
     }
 
     /**
@@ -408,20 +380,6 @@ export class Vector2 {
     }
 
     /**
-     * unfloats vector if needed
-     * @returns {{x: *, y: *}}
-     */
-    unfloat() {
-        this.x = Math.round(this.x);
-        this.y = Math.round(this.y);
-
-        return {
-            x: this.x,
-            y: this.y
-        };
-    }
-
-    /**
      * Returns dot product of this vector and other vector as scalar amount
      * @param vector
      * @returns {number}
@@ -448,34 +406,12 @@ export class Vector2 {
         return Math.atan2(this.x, this.y) * 180 / Math.PI;
     };
 
-
     /**
      * Return string of vector
      * @returns {string}
      */
     toString() {
-        return 'x:' + this.x + ', y:' + this.y;
-    };
-
-    /**
-     * Receive a vector and rotate it a certain amount of degrees
-     * @param vector
-     * @param angle
-     * @returns {{x: *, y: *}}
-     */
-    rotateVector(vector, angle) {
-        let r = [];
-        let x = this.x - vector.x;
-        let y = this.y - vector.y;
-        r[0] = x * Math.cos(angle) - y * Math.sin(angle);
-        r[1] = x * Math.sin(angle) + y * Math.cos(angle);
-        r[0] += vector.x;
-        r[1] += vector.y;
-
-        return {
-            x: r[0],
-            y: r[1]
-        };
+        return 'x:' + this.x + ', y: ' + this.y;
     };
 
     /**
@@ -486,15 +422,9 @@ export class Vector2 {
     normaliseVector() {
         let mag = this.magnitude();
         if (mag === 0) {
-            return {
-                x: 0,
-                y: 0
-            };
+            return new Vector2(0, 0);
         } else {
-            return {
-                x: this.x / mag,
-                y: this.y / mag
-            };
+            return new Vector2(this.x / mag, this.y / mag);
         }
     }
 }

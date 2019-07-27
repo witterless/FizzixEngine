@@ -1,5 +1,3 @@
-"use strict";
-
 import {Vector2} from "../vector/Vector2.js";
 
 /**
