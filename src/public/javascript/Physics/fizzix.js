@@ -62,11 +62,13 @@ export class Canvas {
     /**
      * Drawing the object to the canvas simulation
      * Also calls requestAnimationFrame to continually update the simulation
+     * Draw function that receives two parameters to allow it to draw the balls array
+     * and then draw again once new position has been set
      * @param toDraw
      * @param done
      */
     draw(toDraw, done) {
-        this.context.fillStyle = "#0D1B4B";
+        this.context.fillStyle = '#b3cde0';
         this.context.fillRect(0, 0, this.width, this.height);
 
         toDraw.forEach(draw => {
@@ -81,14 +83,14 @@ export class Canvas {
     }
 
     /**
-     * remove everything from canvas
+     * Clear the canvas of balls
      */
     clearCanvas() {
         this.world.removeBalls();
     }
 
     /**
-     * add all user interaction in this class
+     * Add ball function will add randomObject
      */
     addBall() {
         this.world.addRandomObject();
@@ -96,8 +98,8 @@ export class Canvas {
 }
 
 /**
- * World function used for creating a canvas area.
- * Includes several functions for while using canvas area.
+ * Design the world by using balls and physics.
+ *
  */
 export class World {
     /**
@@ -281,10 +283,9 @@ export class Fizzix {
      * @param ball1
      * @param i
      * @param ballsArray
-     * @returns {boolean}
      */
     static checkCollision(ball1, i, ballsArray) {
-        return ballsArray.reduce((collided, ball2, j) => {
+        return ballsArray.forEach((ball2, j) => {
             if (i !== j) {
                 let sumOfRadius = ball1.size + ball2.size;
 
@@ -301,15 +302,10 @@ export class Fizzix {
                     Fizzix.impulse(ball1, ball2);
                     //balls can finally collide
                     Fizzix.calculateNewVelocities(ball1, ball2);
-                    return true;
-                } else {
-                    return collided;
                 }
-            } else {
-                return collided;
             }
-        }, false);
-    };
+        });
+    }
 
     /**
      * Calculates new velocities of objects that have been deemed to have collided with each other
@@ -422,12 +418,10 @@ export class Fizzix {
     static setFriction(ball) {
         //friction acts in the opposite direction of velocity of so can find this by inverting velocity vector
         let friction = ball.velocity;
-        console.log(friction);
         friction.invert();
-        console.log(friction);
 
         // using formula for friction - creating the normal and coefficient of friction
-        let coefficientOfFriction = 0.8;
+        let coefficientOfFriction = 0.01;
         let normal = 1;
 
         //convert scalar to vector
@@ -435,9 +429,7 @@ export class Fizzix {
         let finalFriction = normalisedFriction.multiply(normal * coefficientOfFriction);
 
         //apply this as a force
-        ball.velocity.subtractVector(finalFriction);
-
+        ball.acceleration.addVector(finalFriction);
     }
 }
 
-// new Canvas('myCanvas');

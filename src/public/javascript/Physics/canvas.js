@@ -195,7 +195,6 @@ function Ball(mass, x, y, xv, yv, colour, size) {
         if (this.location.y > height) {
             this.location.y = height;
             this.velocity.y *= -1 * friction;
-            //this.velocity.invertY();
         }
 
         if ((this.location.y) < 0) {
