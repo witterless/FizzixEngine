@@ -32,12 +32,16 @@ html, button, input, select, textarea,
     padding: 20px;
 }
 
-#myCanvas {
- border: 1 px solid black;
-}
-
 .demo-button {
     margin: 5px;
+}
+
+.submit-button{
+    margin-left: 50px;
+}
+
+.reset-button{
+    align-items: center;
 }
 
 /*#pooltable {*/

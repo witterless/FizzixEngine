@@ -10,84 +10,96 @@
 
 </head>
 <body>
-
-<div class="top">
-    <div class="pure-g">
-        <div class="pure-u-1-2">
-            <h1 onclick="window.location.href = 'index.html';">Fizzix Engine</h1>
-        </div>
-        <div class="pure-u-1-2">
-            <div class="pure-g" id="header-menu">
-                <div class="pure-u-1-2">
-                    <button onclick="window.location.href = 'index.html';" type="button"
-                            class="button-xlarge pure-button">
-                        Home Page
-                    </button>
-                </div>
-                <div class="pure-u-1-2">
-                    <button onclick="window.location.href = 'demo.html';" type="button"
-                            class="button-xlarge pure-button">
-                        Demo Page
-                    </button>
+<div class="container">
+    <div class="top">
+        <div class="pure-g">
+            <div class="pure-u-1-5" id="logo">
+                <img onclick="window.location.href = 'index.html';" class="header-logo" src="collision.png">
+            </div>
+            <div class="pure-u-2-5" id="title">
+                <h1><a onclick="window.location.href = 'index.html';">Fizzix Engine</a></h1>
+            </div>
+            <div class="pure-u-2-5">
+                <div class="pure-g">
+                    <div class="pure-u-1-2">
+                        <div class="button-holder">
+                            <button onclick="window.location.href = 'index.html';" type="button"
+                                    class="button-xlarge pure-button">
+                                Home Page
+                            </button>
+                        </div>
+                    </div>
+                    <div class="pure-u-1-2">
+                        <div class="button-holder">
+                            <button onclick="window.location.href = 'demo.html';" type="button"
+                                    class="button-xlarge pure-button">
+                                Demo Page
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="main-body">
-    <div class="container">
-        <div class="pure-g">
-            <div class="pure-u-2-3">
-                <p>1. Testing Objects Moving on Canvas</p>
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/xf3dkgiwpCI" frameborder="0"
-                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen>
-                </iframe>
-                <p>2. Collision Testing using Colour Change</p>
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/nOSbcmO26II" frameborder="0"
-                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen>
-                </iframe>
-                <p>3. Adding random ball to the simulation</p>
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/9znNDGXaO2g" frameborder="0"
-                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen></iframe>
-                <p>4. Testing Gravity Simulation</p>
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/UD3qq0UnWEA" frameborder="0"
-                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen></iframe>
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/GQL5Mp4Og-k" frameborder="0"
-                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen></iframe>
-                <p>5. Initial Collision Response - Incorrect Velocities after Collision</p>
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/_aBh2OEs1Sg" frameborder="0"
-                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen></iframe>
-                <p>6. Balls getting 'stuck' on each other when colliding</p>
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/2jDyAo7_SAs" frameborder="0"
-                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen></iframe>
-                <p>7. Ball areas are overlapping with each other and causing continuous collision without separating</p>
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/awe7btteLVs" frameborder="0"
-                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen></iframe>
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/JH6WWc95enA" frameborder="0"
-                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen></iframe>
-                <p>8. Overlap problem solved - depicted using add several balls to canvas area and no overlap. No collision
-                    response here.</p>
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/vTjaAxaZMKc" frameborder="0"
-                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen></iframe>
-                <p>9. Collision and Impulse working together to simulation physical reaction. Console also shows updated velocities for each ball.</p>
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/MKtk5NsZZi8" frameborder="0"
-                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen></iframe>
-            </div>
-            <div class="pure-u-1-3">
-                <h3>Welcome to the Fizzix Engine</h3>
-                <p>Videos to depict the development of the Fizzix Engine are included here.</p>
+    <div class="main-body">
+        <div class="container">
+            <div class="pure-g">
+                <div class="pure-u-2-3">
+                    <p>1. Testing Objects Moving on Canvas</p>
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/xf3dkgiwpCI" frameborder="0"
+                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen>
+                    </iframe>
+                    <p>2. Collision Testing using Colour Change</p>
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/nOSbcmO26II" frameborder="0"
+                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen>
+                    </iframe>
+                    <p>3. Adding random ball to the simulation</p>
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/9znNDGXaO2g" frameborder="0"
+                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen></iframe>
+                    <p>4. Testing Gravity Simulation</p>
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/UD3qq0UnWEA" frameborder="0"
+                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen></iframe>
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/GQL5Mp4Og-k" frameborder="0"
+                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen></iframe>
+                    <p>5. Initial Collision Response - Incorrect Velocities after Collision</p>
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/_aBh2OEs1Sg" frameborder="0"
+                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen></iframe>
+                    <p>6. Balls getting 'stuck' on each other when colliding</p>
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/2jDyAo7_SAs" frameborder="0"
+                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen></iframe>
+                    <p>7. Ball areas are overlapping with each other and causing continuous collision without
+                        separating</p>
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/awe7btteLVs" frameborder="0"
+                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen></iframe>
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/JH6WWc95enA" frameborder="0"
+                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen></iframe>
+                    <p>8. Overlap problem solved - depicted using add several balls to canvas area and no overlap. No
+                        collision
+                        response here.</p>
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/vTjaAxaZMKc" frameborder="0"
+                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen></iframe>
+                    <p>9. Collision and Impulse working together to simulation physical reaction. Console also shows
+                        updated
+                        velocities for each ball.</p>
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/MKtk5NsZZi8" frameborder="0"
+                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen></iframe>
+                </div>
+                <div class="pure-u-1-3">
+                    <h3>Welcome to the Fizzix Engine</h3>
+                    <p>Videos to depict the development of the Fizzix Engine are included here.</p>
+                </div>
             </div>
         </div>
     </div>

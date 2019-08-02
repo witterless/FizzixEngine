@@ -28,20 +28,6 @@ export class Canvas {
                 random: true
             },
         ];
-        // {
-        //     random: true
-        // },
-        // {
-        //     setMass: 10,
-        //     setX: 400,
-        //     setY: 300,
-        //     setXV: 1,
-        //     setXY: 1,
-        //     setColour: '#' + (Math.random() * 0xFFFFFF << 0).toString(16),
-        //     setSize: 40,
-        //     setRestitution: 0.1
-        // },
-        // ];
 
         //binding this object
         this.draw = this.draw.bind(this);
@@ -49,14 +35,6 @@ export class Canvas {
         this.addBall = this.addBall.bind(this);
 
         this.world = new World(this.width, this.height, balls, this.draw);
-
-        let addBallClick = document.getElementById('add-ball');
-        addBallClick.addEventListener('click', this.addBall);
-        // addBallClick.addEventListener('click', this.getNumberOfBalls);
-        let clearDemoClick = document.getElementById('clear-demo');
-        clearDemoClick.addEventListener('click', this.clearCanvas);
-        //clearDemoClick.addEventListener('click', this.getNumberOfBalls);
-
     }
 
     /**
@@ -279,7 +257,7 @@ export class Fizzix {
     /**
      * Will take the current ball object, current loop number and the ballsArray.
      * Checks if current ball has collided with another one in the ballsArray
-     * Returns boolean value to allow the Physics Engine to update objects locations and velocities
+     * Allows the Physics Engine to update objects locations and velocities
      * @param ball1
      * @param i
      * @param ballsArray
@@ -407,7 +385,6 @@ export class Fizzix {
     static applyForce(force, ball) {
         let acceleration = force.divide(ball.mass);
         ball.acceleration.addVector(acceleration);
-
     }
 
     /**
@@ -421,15 +398,15 @@ export class Fizzix {
         friction.invert();
 
         // using formula for friction - creating the normal and coefficient of friction
-        let coefficientOfFriction = 0.01;
+        let coefficientOfFriction = 0.05;
         let normal = 1;
 
         //convert scalar to vector
         let normalisedFriction = friction.normaliseVector();
         let finalFriction = normalisedFriction.multiply(normal * coefficientOfFriction);
 
+        Fizzix.applyForce(finalFriction, ball);
         //apply this as a force
-        ball.acceleration.addVector(finalFriction);
     }
 }
 

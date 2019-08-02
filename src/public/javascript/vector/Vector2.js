@@ -10,7 +10,7 @@ export class Vector2 {
     }
 
     /**
-     * scale a vector by a sum
+     * Scale a vector by a sum
      * called in the calculate velocity function in Fizzix
      * @param num
      * @returns {Vector2}
@@ -44,57 +44,38 @@ export class Vector2 {
         this.x += num;
         this.y += num;
 
-        return {
-            x: this.x,
-            y: this.y
-        };
+        return new Vector2(this.x, this.y);
     }
 
     addX(num) {
         this.x += num;
 
-        return {
-            x: this.x,
-            y: this.y
-        };
+        return new Vector2(this.x, this.y);
     }
 
     addY(num) {
         this.y += num;
 
-        return {
-            x: this.x,
-            y: this.y
-        };
+        return new Vector2(this.x, this.y);
     }
 
     subtract(num) {
         this.x -= num;
         this.y -= num;
 
-        return {
-            //return new Vector2(this.x,this.y)
-            x: this.x,
-            y: this.y
-        };
+        return new Vector2(this.x, this.y);
     }
 
     subtractX(num) {
         this.x -= num;
 
-        return {
-            x: this.x,
-            y: this.y
-        };
+        return new Vector2(this.x, this.y);
     }
 
     subtractY(num) {
         this.y -= num;
 
-        return {
-            x: this.x,
-            y: this.y
-        };
+        return new Vector2(this.x, this.y);
     }
 
     multiply(num) {
@@ -107,10 +88,7 @@ export class Vector2 {
     multiplyX(num) {
         this.x *= num;
 
-        return {
-            x: this.x,
-            y: this.y
-        };
+        return new Vector2(this.x, this.y);
     }
 
     multiplyY(num) {
@@ -128,10 +106,7 @@ export class Vector2 {
             this.y = 0;
         }
         return new Vector2(this.x, this.y);
-        // return {
-        //     x: this.x,
-        //     y: this.y
-        // };
+
     }
 
     divideX(num) {
@@ -140,10 +115,7 @@ export class Vector2 {
         } else {
             this.x = 0;
         }
-        return {
-            x: this.x,
-            y: this.y
-        };
+        return new Vector2(this.x, this.y);
     }
 
     divideY(num) {
@@ -152,10 +124,7 @@ export class Vector2 {
         } else {
             this.y = 0;
         }
-        return {
-            x: this.x,
-            y: this.y
-        };
+        return new Vector2(this.x, this.y);
     }
 
     /**
@@ -179,10 +148,7 @@ export class Vector2 {
     addVectorX(vector) {
         this.x += vector.x;
 
-        return {
-            x: this.x,
-            y: this.y
-        };
+        return new Vector2(this.x, this.y);
     }
 
     /**
@@ -193,10 +159,7 @@ export class Vector2 {
     addVectorY(vector) {
         this.y += vector.y;
 
-        return {
-            x: this.x,
-            y: this.y
-        };
+        return new Vector2(this.x, this.y);
     }
 
     /**
@@ -223,10 +186,7 @@ export class Vector2 {
     subtractVectorX(vector) {
         this.x -= vector.x;
 
-        return {
-            x: this.x,
-            y: this.y
-        };
+        return new Vector2(this.x, this.y);
     }
 
     /**
@@ -237,10 +197,7 @@ export class Vector2 {
     subtractVectorY(vector) {
         this.y -= vector.y;
 
-        return {
-            x: this.x,
-            y: this.y
-        };
+        return new Vector2(this.x, this.y);
     }
 
     /**
@@ -261,11 +218,7 @@ export class Vector2 {
             this.y = 0;
         }
 
-
-        return {
-            x: this.x,
-            y: this.y
-        };
+        return new Vector2(this.x, this.y);
     }
 
     /**
@@ -276,10 +229,7 @@ export class Vector2 {
     divideVectorX(vector) {
         this.x /= vector.x;
 
-        return {
-            x: this.x,
-            y: this.y
-        };
+        return new Vector2(this.x, this.y);
     }
 
     /**
@@ -290,10 +240,7 @@ export class Vector2 {
     divideVectorY(vector) {
         this.y /= vector.y;
 
-        return {
-            x: this.x,
-            y: this.y
-        };
+        return new Vector2(this.x, this.y);
     }
 
     /**
@@ -305,10 +252,7 @@ export class Vector2 {
         this.x *= vector.x;
         this.y *= vector.y;
 
-        return {
-            x: this.x,
-            y: this.y
-        };
+        return new Vector2(this.x, this.y);
     }
 
     /**
@@ -319,10 +263,7 @@ export class Vector2 {
     multiplyVectorX(vector) {
         this.x *= vector.x;
 
-        return {
-            x: this.x,
-            y: this.y
-        };
+        return new Vector2(this.x, this.y);
     }
 
     /**
@@ -333,10 +274,7 @@ export class Vector2 {
     multiplyVectorY(vector) {
         this.y *= vector.y;
 
-        return {
-            x: this.x,
-            y: this.y
-        };
+        return new Vector2(this.x, this.y);
     }
 
     /**
@@ -347,10 +285,7 @@ export class Vector2 {
         this.x *= -1;
         this.y *= -1;
 
-        return {
-            x: this.x,
-            y: this.y
-        };
+        return new Vector2(this.x, this.y);
     }
 
     /**
@@ -360,10 +295,7 @@ export class Vector2 {
     invertX() {
         this.x *= -1;
 
-        return {
-            x: this.x,
-            y: this.y
-        };
+        return new Vector2(this.x, this.y);;
     }
 
     /**
@@ -373,10 +305,7 @@ export class Vector2 {
     invertY() {
         this.y *= -1;
 
-        return {
-            x: this.x,
-            y: this.y
-        };
+        return new Vector2(this.x, this.y);
     }
 
     /**
@@ -452,4 +381,4 @@ let [x, y] = getObj2();
 
 // export default Vector2;
 
-//module.exports.Vector2 = Vector2;
+// module.exports.Vector2 = Vector2;
