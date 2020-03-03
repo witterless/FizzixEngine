@@ -1,9 +1,61 @@
-#myCanvas {
-    border: 1px solid black;
-    /*margin: 50px;*/
+html, button, input, select, textarea,
+.pure-g [class *= "pure-u"] {
+    /* Set your content font stack here: */
+    font-family: Georgia, Times, "Times New Roman", serif;
 }
 
-h1, h3 {
-    font-family: Arial, Calibri, serif;
-    color: slategrey;
+#header-menu .pure-button {
+    /*display: block;*/
+    text-align: center;
 }
+
+.button-holder{
+   text-align: center;padding: 10%;
+}
+
+.top {
+    background-color: rgb(13, 27, 75);
+    color: white;
+   /*height: 80px;*/
+}
+
+.top img {
+    display: flex;
+    vertical-align: top;
+    width: 50px;
+    height: 50px;
+    margin-top: 15px;
+    margin-left: 40px;
+}
+
+.main-body {
+    padding: 20px;
+}
+
+.demo-button {
+    margin: 5px;
+}
+
+.submit-button{
+    margin-left: 50px;
+}
+
+.reset-button{
+    align-items: center;
+}
+
+/*#pooltable {*/
+/*    border: 1px solid black;*/
+/*}*/
+
+#poolTitle {
+    margin-bottom: 10px;
+}
+
+/*#header-menu {*/
+/*    display: inline-block;*/
+/*    width: 50%;*/
+/*    text-align: center;*/
+/*    margin-top: 20px;*/
+/*}*/
+
