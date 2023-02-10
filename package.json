@@ -1,0 +1,15 @@
+{
+  "name": "fizzixengine",
+  "version": "1.0.0",
+  "description": "javascript 2d physics engine",
+  "main": "index.js",
+  "scripts": {
+    "test": "",
+    "start": "node src/server.js"
+  },
+  "author": "louisesjpiers@gmail.com",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
